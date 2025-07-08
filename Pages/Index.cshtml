@@ -1,51 +1,28 @@
 @page
 @model MeuAppSeguranca.Pages.IndexModel
-@{
-    ViewData["Title"] = "Testes de Segurança do Cloudinho";
+
+<form method="post">
+    <label for="target">URL ou IP para testar:</label><br />
+    <input type="text" id="target" name="Target" value="@Model.Target" placeholder="Digite URL ou IP" style="width: 100%; max-width: 400px;" />
+    <br /><br />
+    <button type="submit">Executar testes</button>
+</form>
+
+@if (Model.HasResult)
+{
+    <fieldset>
+        <legend>Teste Básico</legend>
+        <div class="result-box">@Model.BasicResult</div>
+    </fieldset>
+    <fieldset>
+        <legend>Teste Médio</legend>
+        <div class="result-box">@Model.MediumResult</div>
+    </fieldset>
+    <fieldset>
+        <legend>Teste Avançado</legend>
+        <div class="result-box">@Model.AdvancedResult</div>
+    </fieldset>
+
+    <h3>Nível de Segurança: <span style="color:@Model.SecurityLevelColor;">@Model.SecurityLevel</span></h3>
+    <h4>Nível de Ameaça: @Model.ThreatLevel</h4>
 }
-
-<section style="max-width: 800px; margin: auto;">
-    <h2 style="color: #facc15;">Sentinel7 - Testes de Segurança do Cloudinho</h2>
-
-    <form method="post" style="margin-top: 2rem;">
-        <label for="Target" style="display: block; margin-bottom: 0.5rem;">Informe uma URL ou IP:</label>
-        <input type="text" id="Target" name="Target" value="@Model.Target" placeholder="Ex: https://site.com ou 1.2.3.4"
-               style="width: 100%; padding: 0.5rem; border-radius: 5px; border: none; margin-bottom: 1rem;" required />
-
-        <button type="submit"
-                style="background-color: #facc15; color: #000; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
-            Iniciar Teste Completo
-        </button>
-    </form>
-
-    @if (Model.HasResult)
-    {
-        <hr style="margin: 2rem 0;" />
-
-        <h3 style="color: #38bdf8;">Resultados dos Testes</h3>
-
-        <div>
-            <h4>Básico</h4>
-            <p>✔️ Verifica se o site está acessível, valida SSL e portas abertas.</p>
-            <p><strong>Resultado:</strong> @Model.BasicResult</p>
-        </div>
-
-        <div>
-            <h4>Médio</h4>
-            <p>⚠️ Testa headers de segurança, redirecionamentos e políticas CSP.</p>
-            <p><strong>Resultado:</strong> @Model.MediumResult</p>
-        </div>
-
-        <div>
-            <h4>Avançado</h4>
-            <p>🔥 Realiza simulações de XSS, SQLi, brute-force e análise de fingerprint.</p>
-            <p><strong>Resultado:</strong> @Model.AdvancedResult</p>
-        </div>
-
-        <hr style="margin: 2rem 0;" />
-        <div>
-            <h3>Nível de Segurança Final: <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span></h3>
-            <p>Grau de Ameaça: <strong>@Model.ThreatLevel</strong></p>
-        </div>
-    }
-</section>

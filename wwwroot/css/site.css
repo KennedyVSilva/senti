@@ -1,74 +1,48 @@
-body.dark-theme {
-  background-color: #121212;
-  color: #eee;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
+body {
+    background-color: #12121b;
+    color: #ddd;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container {
-  max-width: 960px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-input, select, button, textarea {
-  background-color: #1e1e1e;
-  border: 1px solid #444;
-  color: #eee;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-input:focus, select:focus, button:focus, textarea:focus {
-  outline: none;
-  border-color: #5e9eff;
-  box-shadow: 0 0 8px #5e9eff;
+input, button, select, textarea {
+    background-color: #1e1e2f;
+    color: #ddd;
+    border: 1px solid #444;
+    padding: 0.5rem;
+    border-radius: 5px;
 }
 
 button {
-  cursor: pointer;
-  background-color: #007acc;
-  color: white;
-  border: none;
+    background-color: #3b82f6;
+    border: none;
+    color: white;
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: #005f9e;
+    background-color: #2563eb;
 }
 
-h1, h2, h3 {
-  font-weight: 700;
-  margin-bottom: 1rem;
+fieldset {
+    border: 1px solid #444;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
 }
 
-header nav {
-  display: flex;
-  align-items: center;
-  background-color: #1f1f1f;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+legend {
+    padding: 0 0.5rem;
+    font-weight: 600;
 }
 
-.logo {
-  height: 32px;
-  margin-right: 10px;
-}
-
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #eee;
-}
-
-footer {
-  background-color: #1f1f1f;
-  color: #777;
-  text-align: center;
-  padding: 1rem 0;
-  font-size: 0.9rem;
-  margin-top: 3rem;
+.result-box {
+    background-color: #27293d;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+    color: #eee;
+    white-space: pre-wrap;
+    font-family: Consolas, monospace;
 }
