@@ -1,0 +1,25 @@
+@* Layout padrão com tema escuro e logo "Sentinel" *@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark-theme">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sentinel</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="~/logo.svg" alt="Sentinel Logo" class="logo" />
+            <span class="logo-text">Sentinel</span>
+        </nav>
+    </header>
+    <main class="container">
+        @RenderBody()
+    </main>
+    <footer>
+        <p>© 2025 Sentinel - Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

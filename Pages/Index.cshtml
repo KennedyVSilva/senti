@@ -1,0 +1,61 @@
+@page
+@model MeuAppSeguranca.Pages.IndexModel
+@{
+    ViewData["Title"] = "Sentinel - Testes de Segurança";
+}
+
+<h1>Sentinel - Testes de Segurança</h1>
+
+<form method="post">
+    <div>
+        <label for="Url">URL para testar:</label><br />
+        <input type="url" id="Url" name="Url" value="@Model.Url" required style="width:100%" />
+    </div>
+    <div style="margin-top: 1rem;">
+        <label for="TestType">Tipo de teste:</label><br />
+        <select id="TestType" name="TestType" required>
+            <option value="">-- Selecione --</option>
+            <option value="PortScan" selected="@Model.TestType == "PortScan"">Port Scan</option>
+            <option value="SQLInjection" selected="@Model.TestType == "SQLInjection"">SQL Injection</option>
+            <option value="XSS" selected="@Model.TestType == "XSS"">XSS</option>
+            <option value="SSLTest" selected="@Model.TestType == "SSLTest"">Teste SSL/TLS</option>
+            <option value="DNSEnumeration" selected="@Model.TestType == "DNSEnumeration"">Enumeração DNS</option>
+            <option value="Headers" selected="@Model.TestType == "Headers"">Headers HTTP</option>
+        </select>
+    </div>
+    <div style="margin-top: 1rem;">
+        <button type="submit">Iniciar Teste</button>
+    </div>
+</form>
+
+@if (Model.TestInProgress)
+{
+    <div style="margin-top: 2rem;">
+        <h2>Progresso do Teste:</h2>
+        <p>@Model.TestProgressMessage</p>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.TestResult))
+{
+    <div style="margin-top: 2rem;">
+        <h2>Resultado do Teste:</h2>
+        <pre style="background:#222;padding:1rem;border-radius:5px;color:#0f0;">@Model.TestResult</pre>
+        <button onclick="downloadResult()">Exportar Resultado</button>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function downloadResult() {
+            const text = `@Model.TestResult`;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resultado_teste.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+}
