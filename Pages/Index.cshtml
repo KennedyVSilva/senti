@@ -1,61 +1,51 @@
 @page
-@model MeuAppSeguranca.Pages.IndexModel
+@model IndexModel
 @{
-    ViewData["Title"] = "Sentinel - Testes de Segurança";
+    ViewData["Title"] = "Testes de Segurança do Cloudinho";
 }
 
-<h1>Sentinel - Testes de Segurança</h1>
+<section style="max-width: 800px; margin: auto;">
+    <h2 style="color: #facc15;">Sentinel7 - Testes de Segurança do Cloudinho</h2>
 
-<form method="post">
-    <div>
-        <label for="Url">URL para testar:</label><br />
-        <input type="url" id="Url" name="Url" value="@Model.Url" required style="width:100%" />
-    </div>
-    <div style="margin-top: 1rem;">
-        <label for="TestType">Tipo de teste:</label><br />
-        <select id="TestType" name="TestType" required>
-            <option value="">-- Selecione --</option>
-            <option value="PortScan" selected="@Model.TestType == "PortScan"">Port Scan</option>
-            <option value="SQLInjection" selected="@Model.TestType == "SQLInjection"">SQL Injection</option>
-            <option value="XSS" selected="@Model.TestType == "XSS"">XSS</option>
-            <option value="SSLTest" selected="@Model.TestType == "SSLTest"">Teste SSL/TLS</option>
-            <option value="DNSEnumeration" selected="@Model.TestType == "DNSEnumeration"">Enumeração DNS</option>
-            <option value="Headers" selected="@Model.TestType == "Headers"">Headers HTTP</option>
-        </select>
-    </div>
-    <div style="margin-top: 1rem;">
-        <button type="submit">Iniciar Teste</button>
-    </div>
-</form>
+    <form method="post" style="margin-top: 2rem;">
+        <label for="Target" style="display: block; margin-bottom: 0.5rem;">Informe uma URL ou IP:</label>
+        <input type="text" id="Target" name="Target" value="@Model.Target" placeholder="Ex: https://site.com ou 1.2.3.4"
+               style="width: 100%; padding: 0.5rem; border-radius: 5px; border: none; margin-bottom: 1rem;" required />
 
-@if (Model.TestInProgress)
-{
-    <div style="margin-top: 2rem;">
-        <h2>Progresso do Teste:</h2>
-        <p>@Model.TestProgressMessage</p>
-    </div>
-}
+        <button type="submit"
+                style="background-color: #facc15; color: #000; padding: 0.6rem 1.2rem; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
+            Iniciar Teste Completo
+        </button>
+    </form>
 
-@if (!string.IsNullOrEmpty(Model.TestResult))
-{
-    <div style="margin-top: 2rem;">
-        <h2>Resultado do Teste:</h2>
-        <pre style="background:#222;padding:1rem;border-radius:5px;color:#0f0;">@Model.TestResult</pre>
-        <button onclick="downloadResult()">Exportar Resultado</button>
-    </div>
-}
+    @if (Model.HasResult)
+    {
+        <hr style="margin: 2rem 0;" />
 
-@section Scripts {
-    <script>
-        function downloadResult() {
-            const text = `@Model.TestResult`;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'resultado_teste.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-    </script>
-}
+        <h3 style="color: #38bdf8;">Resultados dos Testes</h3>
+
+        <div>
+            <h4>Básico</h4>
+            <p>✔️ Verifica se o site está acessível, valida SSL e portas abertas.</p>
+            <p><strong>Resultado:</strong> @Model.BasicResult</p>
+        </div>
+
+        <div>
+            <h4>Médio</h4>
+            <p>⚠️ Testa headers de segurança, redirecionamentos e políticas CSP.</p>
+            <p><strong>Resultado:</strong> @Model.MediumResult</p>
+        </div>
+
+        <div>
+            <h4>Avançado</h4>
+            <p>🔥 Realiza simulações de XSS, SQLi, brute-force e análise de fingerprint.</p>
+            <p><strong>Resultado:</strong> @Model.AdvancedResult</p>
+        </div>
+
+        <hr style="margin: 2rem 0;" />
+        <div>
+            <h3>Nível de Segurança Final: <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span></h3>
+            <p>Grau de Ameaça: <strong>@Model.ThreatLevel</strong></p>
+        </div>
+    }
+</section>

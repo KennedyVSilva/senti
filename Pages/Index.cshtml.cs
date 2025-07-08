@@ -1,57 +1,41 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
 
-namespace MeuAppSeguranca.Pages
+namespace Sentinel.Pages
 {
     public class IndexModel : PageModel
     {
         [BindProperty]
-        public string Url { get; set; } = "";
+        public string Target { get; set; } = string.Empty;
 
-        [BindProperty]
-        public string TestType { get; set; } = "";
+        public bool HasResult { get; set; }
+        public string BasicResult { get; set; } = "";
+        public string MediumResult { get; set; } = "";
+        public string AdvancedResult { get; set; } = "";
+        public string SecurityLevel { get; set; } = "";
+        public string ThreatLevel { get; set; } = "";
+        public string SecurityLevelColor { get; set; } = "";
 
-        public bool TestInProgress { get; set; } = false;
-        public string TestProgressMessage { get; set; } = "";
-        public string TestResult { get; set; } = "";
-
-        public void OnGet()
+        public void OnPost()
         {
-            // Inicialização
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Url) || string.IsNullOrWhiteSpace(TestType))
+            if (string.IsNullOrWhiteSpace(Target))
             {
-                ModelState.AddModelError("", "Por favor, informe a URL e o tipo de teste.");
-                return Page();
+                return;
             }
 
-            TestInProgress = true;
-            TestProgressMessage = "Iniciando teste...";
+            HasResult = true;
 
-            await Task.Delay(2000);
+            // Simulações (substitua futuramente por testes reais)
+            BasicResult = "Conexão segura. SSL válido.";
+            MediumResult = "Headers parcialmente protegidos.";
+            AdvancedResult = "Possível XSS detectado em parâmetro de entrada.";
 
-            TestProgressMessage = $"Executando o teste {TestType}...";
-            await Task.Delay(3000);
+            SecurityLevel = "Médio";
+            ThreatLevel = "Moderado";
+            SecurityLevelColor = "#facc15"; // amarelo
 
-            TestResult = TestType switch
-            {
-                "PortScan" => $"Port Scan para {Url} concluído.\nPortas abertas: 80, 443, 8080.",
-                "SQLInjection" => $"Teste SQL Injection para {Url} concluído.\nNenhuma vulnerabilidade detectada.",
-                "XSS" => $"Teste XSS para {Url} concluído.\nVulnerabilidade detectada em parâmetro 'q'.",
-                "SSLTest" => $"Teste SSL/TLS para {Url} concluído.\nCertificado válido. Força do protocolo: Forte.",
-                "DNSEnumeration" => $"Enumeração DNS para {Url} concluída.\nSubdomínios encontrados: www, api, mail.",
-                "Headers" => $"Análise de Headers HTTP para {Url} concluída.\nHeaders seguros aplicados.",
-                _ => "Teste desconhecido."
-            };
-
-            TestProgressMessage = "Teste concluído.";
-            TestInProgress = false;
-
-            return Page();
+            // Exemplo de lógica futura:
+            // Analisar resultados reais e definir níveis dinamicamente
         }
     }
 }
