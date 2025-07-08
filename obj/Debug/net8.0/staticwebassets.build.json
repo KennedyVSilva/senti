@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "KscqF/0tLx8U8gzpq6zPv9fnKFZuS8fPvxppp2Xmm4M=",
+  "Source": "MeuAppSeguranca",
+  "BasePath": "_content/MeuAppSeguranca",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "MeuAppSeguranca\\wwwroot",
+      "Source": "MeuAppSeguranca",
+      "ContentRoot": "C:\\TI\\Sentinel\\wwwroot\\",
+      "BasePath": "_content/MeuAppSeguranca",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\TI\\Sentinel\\wwwroot\\css\\site.css",
+      "SourceId": "MeuAppSeguranca",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\TI\\Sentinel\\wwwroot\\",
+      "BasePath": "_content/MeuAppSeguranca",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\TI\\Sentinel\\wwwroot\\favicon.svg",
+      "SourceId": "MeuAppSeguranca",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\TI\\Sentinel\\wwwroot\\",
+      "BasePath": "_content/MeuAppSeguranca",
+      "RelativePath": "favicon.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicon.svg"
+    },
+    {
+      "Identity": "C:\\TI\\Sentinel\\wwwroot\\logo.svg",
+      "SourceId": "MeuAppSeguranca",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\TI\\Sentinel\\wwwroot\\",
+      "BasePath": "_content/MeuAppSeguranca",
+      "RelativePath": "logo.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\logo.svg"
+    }
+  ]
+}

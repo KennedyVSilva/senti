@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation; // Import necessário para AddRazorRuntimeCompilation
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages()
