@@ -1,26 +1,31 @@
 @page
 @model MeuAppSeguranca.Pages.IndexModel
+@{
+    Layout = "_Layout";
+}
 
-<form method="post">
+<h2>Sentinel7 - Testes de Segurança do Cloudinho</h2>
+
+<form method="post" style="max-width:400px; margin-bottom: 2rem;">
     <label for="target">URL ou IP para testar:</label><br />
-    <input type="text" id="target" name="Target" value="@Model.Target" placeholder="Digite URL ou IP" style="width: 100%; max-width: 400px;" />
+    <input type="text" id="target" name="Target" value="@Model.Target" placeholder="Digite URL ou IP" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
     <br /><br />
-    <button type="submit">Executar testes</button>
+    <button type="submit" style="padding: 0.5rem 1rem;">Executar testes</button>
 </form>
 
 @if (Model.HasResult)
 {
-    <fieldset>
+    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
         <legend>Teste Básico</legend>
-        <div class="result-box">@Model.BasicResult</div>
+        <pre>@Model.BasicResult</pre>
     </fieldset>
-    <fieldset>
+    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
         <legend>Teste Médio</legend>
-        <div class="result-box">@Model.MediumResult</div>
+        <pre>@Model.MediumResult</pre>
     </fieldset>
-    <fieldset>
+    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
         <legend>Teste Avançado</legend>
-        <div class="result-box">@Model.AdvancedResult</div>
+        <pre>@Model.AdvancedResult</pre>
     </fieldset>
 
     <h3>Nível de Segurança: <span style="color:@Model.SecurityLevelColor;">@Model.SecurityLevel</span></h3>
