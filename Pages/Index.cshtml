@@ -4,30 +4,137 @@
     Layout = "_Layout";
 }
 
-<h2>Sentinel7 - Testes de Segurança do Cloudinho</h2>
+<div class="container">
+    <h1>Sentinel7 - Testes de Segurança do Cloudinho</h1>
 
-<form method="post" style="max-width:400px; margin-bottom: 2rem;">
-    <label for="target">URL ou IP para testar:</label><br />
-    <input type="text" id="target" name="Target" value="@Model.Target" placeholder="Digite URL ou IP" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" />
-    <br /><br />
-    <button type="submit" style="padding: 0.5rem 1rem;">Executar testes</button>
-</form>
+    <img src="logo.svg" alt="Sentinel7 Logo" class="logo" />
 
-@if (Model.HasResult)
-{
-    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
-        <legend>Teste Básico</legend>
-        <pre>@Model.BasicResult</pre>
-    </fieldset>
-    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
-        <legend>Teste Médio</legend>
-        <pre>@Model.MediumResult</pre>
-    </fieldset>
-    <fieldset style="border: 1px solid #444; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color:#27293d; color:#eee;">
-        <legend>Teste Avançado</legend>
-        <pre>@Model.AdvancedResult</pre>
-    </fieldset>
+    <form method="post" class="form-test">
+        <label for="Target">URL ou IP para testar:</label>
+        <input type="text" id="Target" name="Target" value="@Model.Target" placeholder="Digite o IP ou URL..." autofocus />
 
-    <h3>Nível de Segurança: <span style="color:@Model.SecurityLevelColor;">@Model.SecurityLevel</span></h3>
-    <h4>Nível de Ameaça: @Model.ThreatLevel</h4>
-}
+        <button type="submit">Testar</button>
+    </form>
+
+    <!-- Exibe erros de validação -->
+    <div class="validation-summary">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        }
+    </div>
+
+    @if (Model.HasResult)
+    {
+        <div class="results">
+            <h2>Resultados do teste para: <strong>@Model.Target</strong></h2>
+
+            <div class="result-level" style="color:@Model.SecurityLevelColor;">
+                <strong>Nível de Segurança:</strong> @Model.SecurityLevel
+            </div>
+            <div>
+                <strong>Grau de Ameaça:</strong> @Model.ThreatLevel
+            </div>
+
+            <h3>Detalhes dos testes</h3>
+            <ul>
+                <li><strong>Básico:</strong> @Model.BasicResult</li>
+                <li><strong>Médio:</strong> @Model.MediumResult</li>
+                <li><strong>Avançado:</strong> @Model.AdvancedResult</li>
+            </ul>
+        </div>
+    }
+</div>
+
+<style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: #1f1f1f;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #000;
+    }
+
+    .logo {
+        display: block;
+        margin: 0 auto 1.5rem auto;
+        max-width: 150px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #facc15;
+    }
+
+    form.form-test {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"] {
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: none;
+        font-size: 1rem;
+    }
+
+    button {
+        padding: 0.75rem;
+        background-color: #facc15;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #121212;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #e6b90d;
+    }
+
+    .validation-summary ul {
+        background-color: #ff4d4d;
+        color: white;
+        padding: 1rem;
+        border-radius: 4px;
+        list-style-type: none;
+    }
+
+    .results {
+        background-color: #282828;
+        padding: 1rem;
+        border-radius: 6px;
+    }
+
+    .results h2,
+    .results h3 {
+        margin-top: 0;
+        color: #facc15;
+    }
+
+    ul {
+        padding-left: 1.2rem;
+    }
+</style>

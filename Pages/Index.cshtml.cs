@@ -18,11 +18,35 @@ namespace MeuAppSeguranca.Pages
 
         public void OnPost()
         {
+            // Se vazio, retorna para não executar nada
             if (string.IsNullOrWhiteSpace(Target))
             {
+                ModelState.AddModelError("", "Informe um IP ou URL para testar.");
                 return;
             }
 
+            // Validação da URL/IP
+            Uri uriResult;
+            bool validUrl = Uri.TryCreate(Target, UriKind.Absolute, out uriResult);
+
+            // Se não válido, tenta adicionar esquema http:// para validar
+            if (!validUrl)
+            {
+                validUrl = Uri.TryCreate("http://" + Target, UriKind.Absolute, out uriResult);
+                if (validUrl)
+                {
+                    Target = "http://" + Target; // Atualiza para URL completa
+                }
+            }
+
+            // Se ainda não válido, retorna erro
+            if (!validUrl)
+            {
+                ModelState.AddModelError("", "O valor informado não é um IP ou URL válido.");
+                return;
+            }
+
+            // Se chegou aqui, Target é válido
             HasResult = true;
 
             // Simulações (substitua futuramente por testes reais)
@@ -33,9 +57,6 @@ namespace MeuAppSeguranca.Pages
             SecurityLevel = "Médio";
             ThreatLevel = "Moderado";
             SecurityLevelColor = "#facc15"; // amarelo
-
-            // Exemplo de lógica futura:
-            // Analisar resultados reais e definir níveis dinamicamente
         }
     }
 }
