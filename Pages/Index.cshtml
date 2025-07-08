@@ -11,7 +11,7 @@
 
     <form method="post" class="form-test">
         <label for="Target">URL ou IP para testar:</label>
-        <input type="text" id="Target" name="Target" value="@Model.Target" placeholder="Digite o IP ou URL..." autofocus />
+        <input asp-for="Target" placeholder="Digite o IP ou URL..." autofocus />
 
         <button type="submit">Testar</button>
     </form>
