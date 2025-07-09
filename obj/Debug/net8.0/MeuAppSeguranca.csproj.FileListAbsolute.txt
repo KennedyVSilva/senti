@@ -1,0 +1,10 @@
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.csproj.AssemblyReference.cache
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.GeneratedMSBuildEditorConfig.editorconfig
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.AssemblyInfoInputs.cache
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.AssemblyInfo.cs
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.csproj.CoreCompileInputs.cache
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.MvcApplicationPartsAssemblyInfo.cs
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.MvcApplicationPartsAssemblyInfo.cache
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.RazorAssemblyInfo.cache
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.RazorAssemblyInfo.cs
+C:\TI\Sentinel\obj\Debug\net8.0\MeuAppSeguranca.sourcelink.json

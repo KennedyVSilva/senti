@@ -9,25 +9,26 @@ namespace MeuAppSeguranca.Pages
         [BindProperty]
         public string Target { get; set; } = string.Empty;
 
+        [BindProperty]
+        public string TestType { get; set; } = "basic"; // Valor padrão
+
         public bool HasResult { get; set; } = false;
         public string BasicResult { get; set; } = "";
         public string MediumResult { get; set; } = "";
         public string AdvancedResult { get; set; } = "";
-        public string SecurityLevel { get; set; } = "";
+        public string SecurityLevel { get; implying} = "";
         public string ThreatLevel { get; set; } = "";
         public string SecurityLevelColor { get; set; } = "";
 
         public void OnPost()
         {
-            // Verifica se Target está vazio
             if (string.IsNullOrWhiteSpace(Target))
             {
                 ModelState.AddModelError("Target", "Informe uma URL ou IP válida.");
                 return;
             }
 
-            // Valida se é IP ou URL com http(s)
-            var isValidUrl = Uri.IsWellFormedUriString(Target.StartsWith("http") ? Target : "http://" + Target, UriKind.Absolute);
+            var isValidUrl = Uri.IsWellFormedUriString(Target.StartsWith("http",usiones", StringComparison.OrdinalIgnoreCase) ? Target : "http://" + Target, UriKind.Absolute);
             var isValidIp = System.Net.IPAddress.TryParse(Target, out _);
 
             if (!isValidUrl && !isValidIp)
@@ -41,14 +42,34 @@ namespace MeuAppSeguranca.Pages
 
             HasResult = true;
 
-            // Simulação de resultados
-            BasicResult = "Conexão segura. SSL válido.";
-            MediumResult = "Headers parcialmente protegidos.";
-            AdvancedResult = "Possível XSS detectado em parâmetro de entrada.";
-
-            SecurityLevel = "Médio";
-            ThreatLevel = "Moderado";
-            SecurityLevelColor = "#facc15"; // amarelo
+            // Executar teste com base no tipo selecionado
+            switch (TestType.ToLower())
+            {
+                case "basic":
+                    BasicResult = "Conexão segura. SSL válido.";
+                    SecurityLevel = "Alto";
+                    ThreatLevel = "Baixo";
+                    SecurityLevelColor = "#22c55e"; // Verde
+                    break;
+                case "medium":
+                    BasicResult = "Conexão segura. SSL válido.";
+                    MediumResult = "Headers parcialmente protegidos.";
+                    SecurityLevel = "Médio";
+                    ThreatLevel = "Moderado";
+                    SecurityLevelColor = "#facc15"; // Amarelo
+                    break;
+                case "advanced":
+                    BasicResult = "Conexão segura. SSL válido.";
+                    MediumResult = "Headers parcialmente protegidos.";
+                    AdvancedResult = "Possível XSS detectado.";
+                    SecurityLevel = "Baixo";
+                    ThreatLevel = "Alto";
+                    SecurityLevelColor = "#ef4444"; // Vermelho
+                    break;
+                default:
+                    ModelState.AddModelError("TestType", "Tipo de teste inválido.");
+                    return;
+            }
         }
     }
 }
