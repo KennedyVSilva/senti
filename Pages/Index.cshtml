@@ -3,6 +3,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sentinel7 - Testes de Segurança</title>
     <link rel="stylesheet" href="~/site.css" />
 </head>
@@ -15,7 +17,7 @@
             <input asp-for="Target" placeholder="Digite URL ou IP" />
             <span asp-validation-for="Target" style="color: red;"></span>
             <div>
-                <label>Tipo de Teste:</label>
+                <label for="TestType">Tipo de Teste:</label>
                 <select asp-for="TestType">
                     <option value="basic">Básico</option>
                     <option value="medium">Médio</option>
@@ -45,8 +47,8 @@
             }
         </div>
     }
-    <script asp-add-nonce>
-        @await Html.RenderPartialAsync("_ValidationScriptsPartial")
-    </script>
+    <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

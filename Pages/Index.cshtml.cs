@@ -16,29 +16,41 @@ namespace MeuAppSeguranca.Pages
         public string BasicResult { get; set; } = "";
         public string MediumResult { get; set; } = "";
         public string AdvancedResult { get; set; } = "";
-        public string SecurityLevel { get; implying} = "";
+        public string SecurityLevel { get; set; } = "";
         public string ThreatLevel { get; set; } = "";
         public string SecurityLevelColor { get; set; } = "";
 
         public void OnPost()
         {
+            // Valida campo vazio
             if (string.IsNullOrWhiteSpace(Target))
             {
                 ModelState.AddModelError("Target", "Informe uma URL ou IP válida.");
                 return;
             }
 
-            var isValidUrl = Uri.IsWellFormedUriString(Target.StartsWith("http",usiones", StringComparison.OrdinalIgnoreCase) ? Target : "http://" + Target, UriKind.Absolute);
-            var isValidIp = System.Net.IPAddress.TryParse(Target, out _);
+            // Valida se é uma URL ou IP
+            bool isValid = false;
+            if (System.Net.IPAddress.TryParse(Target, out _))
+            {
+                isValid = true; // IP válido
+            }
+            else if (Uri.IsWellFormedUriString(Target, UriKind.Absolute) || 
+                     Uri.IsWellFormedUriString("http://" + Target, UriKind.Absolute))
+            {
+                isValid = true; // URL válida
+            }
 
-            if (!isValidUrl && !isValidIp)
+            if (!isValid)
             {
                 ModelState.AddModelError("Target", "Formato inválido de URL ou IP.");
                 return;
             }
 
             if (!ModelState.IsValid)
+            {
                 return;
+            }
 
             HasResult = true;
 
