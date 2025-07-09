@@ -11,23 +11,22 @@
 
     <form method="post" class="form-test">
         <label for="Target">URL ou IP para testar:</label>
-        <input asp-for="Target" placeholder="Digite o IP ou URL..." autofocus />
+        <input type="text" id="Target" name="Target" value="@Model.Target" placeholder="Digite o IP ou URL..." autofocus />
 
         <button type="submit">Testar</button>
     </form>
 
-    <!-- Exibe erros de validação -->
-    <div class="validation-summary">
-        @if (!ViewData.ModelState.IsValid)
-        {
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="validation-summary">
             <ul>
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
                     <li>@error.ErrorMessage</li>
                 }
             </ul>
-        }
-    </div>
+        </div>
+    }
 
     @if (Model.HasResult)
     {
@@ -43,9 +42,9 @@
 
             <h3>Detalhes dos testes</h3>
             <ul>
-                <li><strong>Básico:</strong> @Model.BasicResult</li>
-                <li><strong>Médio:</strong> @Model.MediumResult</li>
-                <li><strong>Avançado:</strong> @Model.AdvancedResult</li>
+                <li><strong>🟢 Teste Básico:</strong> @Model.BasicResult</li>
+                <li><strong>🟡 Teste Médio:</strong> @Model.MediumResult</li>
+                <li><strong>🔴 Teste Avançado:</strong> @Model.AdvancedResult</li>
             </ul>
         </div>
     }
