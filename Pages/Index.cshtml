@@ -10,12 +10,15 @@
 </head>
 <body>
     <h1>Sentinel7 - Testes de Segurança do Cloudinho</h1>
-    <form method="post">
+
+    <form method="post" asp-antiforgery="true">
         <fieldset>
             <legend>Teste de Segurança</legend>
+
             <label for="Target">URL ou IP para testar:</label>
             <input asp-for="Target" placeholder="Digite URL ou IP" />
             <span asp-validation-for="Target" style="color: red;"></span>
+
             <div>
                 <label for="TestType">Tipo de Teste:</label>
                 <select asp-for="TestType">
@@ -24,29 +27,45 @@
                     <option value="advanced">Avançado</option>
                 </select>
             </div>
+
             <button type="submit">Testar</button>
         </fieldset>
     </form>
+
     @if (Model.HasResult)
     {
         <div>
             <h3>Resultados</h3>
-            <p>Nível de Segurança: <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span></p>
-            <p>Nível de Ameaça: @Model.ThreatLevel</p>
+
+            <p><strong>Nível de Segurança:</strong> 
+                <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span>
+            </p>
+            <p><strong>Nível de Ameaça:</strong> @Model.ThreatLevel</p>
+
             @if (!string.IsNullOrEmpty(Model.BasicResult))
-            {
-                <p>Teste Básico: @Model.BasicResult</p>
-            }
-            @if (!string.IsNullOrEmpty(Model.MediumResult))
-            {
-                <p>Teste Médio: @Model.MediumResult</p>
-            }
-            @if (!string.IsNullOrEmpty(Model.AdvancedResult))
-            {
-                <p>Teste Avançado: @Model.AdvancedResult</p>
-            }
-        </div>
+			{
+				<div class="result-box">
+					<strong>🔰 Teste Básico:</strong>
+					<p>@Model.BasicResult</p>
+				</div>
+			}
+	@if (!string.IsNullOrEmpty(Model.MediumResult))
+	{
+		<div class="result-box">
+			<strong>🛡️ Teste Médio:</strong>
+			<p>@Model.MediumResult</p>
+		</div>
+	}
+	@if (!string.IsNullOrEmpty(Model.AdvancedResult))
+	{
+		<div class="result-box">
+			<strong>⚔️ Teste Avançado:</strong>
+			<p>@Model.AdvancedResult</p>
+		</div>
+	}
+		</div>
     }
+
     <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
     <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.min.js"></script>
     <script asp-add-nonce src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

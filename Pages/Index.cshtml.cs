@@ -1,87 +1,85 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
+using System.Text.RegularExpressions;
 
 namespace MeuAppSeguranca.Pages
 {
     public class IndexModel : PageModel
     {
         [BindProperty]
-        public string Target { get; set; } = string.Empty;
+        public string Target { get; set; }
 
         [BindProperty]
-        public string TestType { get; set; } = "basic"; // Valor padrão
+        public string TestType { get; set; }
 
-        public bool HasResult { get; set; } = false;
-        public string BasicResult { get; set; } = "";
-        public string MediumResult { get; set; } = "";
-        public string AdvancedResult { get; set; } = "";
-        public string SecurityLevel { get; set; } = "";
-        public string ThreatLevel { get; set; } = "";
-        public string SecurityLevelColor { get; set; } = "";
+        public string BasicResult { get; set; }
+        public string MediumResult { get; set; }
+        public string AdvancedResult { get; set; }
 
-        public void OnPost()
+        public string SecurityLevel { get; set; }
+        public string SecurityLevelColor { get; set; }
+        public string ThreatLevel { get; set; }
+
+        public bool HasResult =>
+            !string.IsNullOrEmpty(BasicResult) ||
+            !string.IsNullOrEmpty(MediumResult) ||
+            !string.IsNullOrEmpty(AdvancedResult);
+
+        public void OnGet()
         {
-            // Valida campo vazio
+        }
+
+        public IActionResult OnPost()
+        {
             if (string.IsNullOrWhiteSpace(Target))
             {
-                ModelState.AddModelError("Target", "Informe uma URL ou IP válida.");
-                return;
+                ModelState.AddModelError("Target", "O campo é obrigatório.");
+                return Page();
             }
 
-            // Valida se é uma URL ou IP
-            bool isValid = false;
-            if (System.Net.IPAddress.TryParse(Target, out _))
+            if (!IsValidUrlOrIp(Target))
             {
-                isValid = true; // IP válido
-            }
-            else if (Uri.IsWellFormedUriString(Target, UriKind.Absolute) || 
-                     Uri.IsWellFormedUriString("http://" + Target, UriKind.Absolute))
-            {
-                isValid = true; // URL válida
+                ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
+                return Page();
             }
 
-            if (!isValid)
-            {
-                ModelState.AddModelError("Target", "Formato inválido de URL ou IP.");
-                return;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return;
-            }
-
-            HasResult = true;
-
-            // Executar teste com base no tipo selecionado
-            switch (TestType.ToLower())
+            switch (TestType?.ToLower())
             {
                 case "basic":
-                    BasicResult = "Conexão segura. SSL válido.";
+                    BasicResult = $"[Simulado] Executado ping e verificação DNS em {Target}";
                     SecurityLevel = "Alto";
+                    SecurityLevelColor = "green";
                     ThreatLevel = "Baixo";
-                    SecurityLevelColor = "#22c55e"; // Verde
                     break;
+
                 case "medium":
-                    BasicResult = "Conexão segura. SSL válido.";
-                    MediumResult = "Headers parcialmente protegidos.";
+                    MediumResult = $"[Simulado] Scan de portas padrão e análise TLS em {Target}";
                     SecurityLevel = "Médio";
+                    SecurityLevelColor = "orange";
                     ThreatLevel = "Moderado";
-                    SecurityLevelColor = "#facc15"; // Amarelo
                     break;
+
                 case "advanced":
-                    BasicResult = "Conexão segura. SSL válido.";
-                    MediumResult = "Headers parcialmente protegidos.";
-                    AdvancedResult = "Possível XSS detectado.";
+                    AdvancedResult = $"[Simulado] Verificação de vulnerabilidades XSS, SQLi, headers em {Target}";
                     SecurityLevel = "Baixo";
-                    ThreatLevel = "Alto";
-                    SecurityLevelColor = "#ef4444"; // Vermelho
+                    SecurityLevelColor = "red";
+                    ThreatLevel = "Crítico";
                     break;
+
                 default:
-                    ModelState.AddModelError("TestType", "Tipo de teste inválido.");
-                    return;
+                    ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                    return Page();
             }
+
+            return Page();
+        }
+
+        private bool IsValidUrlOrIp(string input)
+        {
+            string urlPattern = @"^https?:\/\/[^\s\/$.?#].[^\s]*$";
+            string ipPattern = @"^(\d{1,3}\.){3}\d{1,3}$";
+
+            return Regex.IsMatch(input, urlPattern) || Regex.IsMatch(input, ipPattern);
         }
     }
 }

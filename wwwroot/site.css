@@ -1,0 +1,102 @@
+body {
+    background-color: #12121b;
+    color: #ddd;
+    margin: 0;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+input, select, button {
+    width: 100%;
+    background-color: #1e1e2f;
+    color: #ddd;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+}
+
+button {
+    margin-top: 1rem;
+    cursor: pointer;
+    background-color: #3b82f6;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #2563eb;
+}
+
+fieldset {
+    border: 1px solid #444;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background-color: #1a1a2d;
+}
+
+legend {
+    padding: 0 0.5rem;
+    font-weight: 600;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+span[asp-validation-for] {
+    display: block;
+    color: #f87171;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Resultados */
+div > h3 {
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+.result-box {
+    background-color: #27293d;
+    border-left: 5px solid #3b82f6;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
+
+.result-box p {
+    margin: 0.5rem 0 0;
+    color: #ccc;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 1rem;
+    }
+
+    input, select, button {
+        font-size: 0.95rem;
+    }
+}
