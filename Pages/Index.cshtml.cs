@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MeuAppSeguranca.Pages
 {
@@ -30,64 +31,51 @@ namespace MeuAppSeguranca.Pages
 
         public void OnGet() { }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            Console.WriteLine("===== [DEBUG] Método OnPost chamado =====");
-            Console.WriteLine($"Target recebido: {Target}");
-            Console.WriteLine($"Tipo de teste recebido: {TestType}");
-
-            try
+            if (string.IsNullOrWhiteSpace(Target))
             {
-                if (string.IsNullOrWhiteSpace(Target))
-                {
-                    ModelState.AddModelError("Target", "O campo é obrigatório.");
-                    return Page();
-                }
-
-                if (!IsValidUrlOrIp(Target))
-                {
-                    ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
-                    return Page();
-                }
-
-                var host = SanitizeTarget(Target);
-
-                switch (TestType?.ToLower())
-                {
-                    case "basic":
-                        BasicResult = ExecutarPing(host);
-                        SecurityLevel = "Alto";
-                        SecurityLevelColor = "green";
-                        ThreatLevel = "Baixo";
-                        break;
-
-                    case "medium":
-                        MediumResult = ExecutarPortScan(host);
-                        SecurityLevel = "Médio";
-                        SecurityLevelColor = "orange";
-                        ThreatLevel = "Moderado";
-                        break;
-
-                    case "advanced":
-                        AdvancedResult = VerificarHeadersEVulnerabilidades(Target);
-                        SecurityLevel = "Baixo";
-                        SecurityLevelColor = "red";
-                        ThreatLevel = "Crítico";
-                        break;
-
-                    default:
-                        ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
-                        return Page();
-                }
-
+                ModelState.AddModelError("Target", "O campo é obrigatório.");
                 return Page();
             }
-            catch (Exception ex)
+
+            if (!IsValidUrlOrIp(Target))
             {
-                Console.WriteLine($"[ERRO] {ex.Message}");
-                ModelState.AddModelError(string.Empty, $"Erro interno: {ex.Message}");
+                ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
                 return Page();
             }
+
+            var host = SanitizeTarget(Target);
+
+            switch (TestType?.ToLower())
+            {
+                case "basic":
+                    BasicResult = ExecutarPing(host);
+                    SecurityLevel = "Alto";
+                    SecurityLevelColor = "green";
+                    ThreatLevel = "Baixo";
+                    break;
+
+                case "medium":
+                    MediumResult = ExecutarPortScan(host);
+                    SecurityLevel = "Médio";
+                    SecurityLevelColor = "orange";
+                    ThreatLevel = "Moderado";
+                    break;
+
+                case "advanced":
+                    AdvancedResult = await VerificarHeadersEVulnerabilidades(Target);
+                    SecurityLevel = "Baixo";
+                    SecurityLevelColor = "red";
+                    ThreatLevel = "Crítico";
+                    break;
+
+                default:
+                    ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                    return Page();
+            }
+
+            return Page();
         }
 
         private string ExecutarPing(string host)
@@ -116,16 +104,13 @@ namespace MeuAppSeguranca.Pages
                 try
                 {
                     using var client = new TcpClient();
-                    var resultado = client.ConnectAsync(host, porta).Wait(1000);
+                    var connectTask = client.ConnectAsync(host, porta);
+                    bool completed = connectTask.Wait(1000);
 
-                    if (resultado && client.Connected)
-                    {
+                    if (completed && client.Connected)
                         resultados.Add($"Porta {porta}: ✅ ABERTA");
-                    }
                     else
-                    {
                         resultados.Add($"Porta {porta}: ❌ FECHADA");
-                    }
                 }
                 catch
                 {
@@ -136,12 +121,12 @@ namespace MeuAppSeguranca.Pages
             return $"Scan em {host}:\n" + string.Join("\n", resultados);
         }
 
-        private string VerificarHeadersEVulnerabilidades(string url)
+        private async Task<string> VerificarHeadersEVulnerabilidades(string url)
         {
             try
             {
                 using var http = new HttpClient();
-                var response = http.GetAsync(url).Result;
+                var response = await http.GetAsync(url);
 
                 var resultado = $"Status HTTP: {(int)response.StatusCode} - {response.ReasonPhrase}\n";
 
@@ -150,10 +135,11 @@ namespace MeuAppSeguranca.Pages
                 else
                     resultado += "❌ Header X-Content-Type-Options ausente\n";
 
-                var html = response.Content.ReadAsStringAsync().Result;
+                var html = await response.Content.ReadAsStringAsync();
 
                 if (html.Contains("<script>") || html.Contains("onerror="))
                     resultado += "⚠️ Possível XSS detectado (conteúdo inline suspeito)\n";
+
                 if (html.ToLower().Contains("sql syntax") || html.ToLower().Contains("mysql"))
                     resultado += "⚠️ Indício de SQLi (mensagem de erro de SQL exposta)\n";
 
@@ -169,8 +155,8 @@ namespace MeuAppSeguranca.Pages
         {
             if (string.IsNullOrWhiteSpace(input)) return false;
 
-            var ipPattern = @"^(\d{1,3}\.){3}\d{1,3}$";
-            var urlPattern = @"^(https?:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,})(\/\S*)?$";
+            var ipPattern = @"^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$";
+            var urlPattern = @"^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$";
 
             return Regex.IsMatch(input, ipPattern) || Regex.IsMatch(input, urlPattern);
         }

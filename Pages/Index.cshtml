@@ -15,12 +15,12 @@
         <fieldset>
             <legend>⚙️ Teste de Segurança</legend>
 
-            <label for="Target">🔗 URL ou IP para testar:</label>
+            <label asp-for="Target">🔗 URL ou IP para testar:</label>
             <input asp-for="Target" placeholder="Ex: https://site.com ou 192.168.0.1" />
             <span asp-validation-for="Target" style="color: red;"></span>
 
             <div>
-                <label for="TestType">🧪 Tipo de Teste:</label>
+                <label asp-for="TestType">🧪 Tipo de Teste:</label>
                 <select asp-for="TestType">
                     <option value="basic">Básico (Testes Passivos)</option>
                     <option value="medium">Médio (Testes Controlados)</option>
@@ -78,7 +78,7 @@
     }
 
     <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script asp-add-nonce src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
