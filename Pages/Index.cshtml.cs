@@ -33,49 +33,58 @@ namespace MeuAppSeguranca.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            if (string.IsNullOrWhiteSpace(Target))
+            try
             {
-                ModelState.AddModelError("Target", "O campo é obrigatório.");
-                return Page();
-            }
-
-            if (!IsValidUrlOrIp(Target))
-            {
-                ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
-                return Page();
-            }
-
-            var host = SanitizeTarget(Target);
-
-            switch (TestType?.ToLower())
-            {
-                case "basic":
-                    BasicResult = ExecutarPing(host);
-                    SecurityLevel = "Alto";
-                    SecurityLevelColor = "green";
-                    ThreatLevel = "Baixo";
-                    break;
-
-                case "medium":
-                    MediumResult = ExecutarPortScan(host);
-                    SecurityLevel = "Médio";
-                    SecurityLevelColor = "orange";
-                    ThreatLevel = "Moderado";
-                    break;
-
-                case "advanced":
-                    AdvancedResult = await VerificarHeadersEVulnerabilidades(Target);
-                    SecurityLevel = "Baixo";
-                    SecurityLevelColor = "red";
-                    ThreatLevel = "Crítico";
-                    break;
-
-                default:
-                    ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                if (string.IsNullOrWhiteSpace(Target))
+                {
+                    ModelState.AddModelError("Target", "O campo é obrigatório.");
                     return Page();
-            }
+                }
 
-            return Page();
+                if (!IsValidUrlOrIp(Target))
+                {
+                    ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
+                    return Page();
+                }
+
+                Target = NormalizeUrl(Target); // garante http:// ou https://
+                var host = SanitizeTarget(Target);
+
+                switch (TestType?.ToLower())
+                {
+                    case "basic":
+                        BasicResult = ExecutarPing(host);
+                        SecurityLevel = "Alto";
+                        SecurityLevelColor = "green";
+                        ThreatLevel = "Baixo";
+                        break;
+
+                    case "medium":
+                        MediumResult = ExecutarPortScan(host);
+                        SecurityLevel = "Médio";
+                        SecurityLevelColor = "orange";
+                        ThreatLevel = "Moderado";
+                        break;
+
+                    case "advanced":
+                        AdvancedResult = await VerificarHeadersEVulnerabilidades(Target);
+                        SecurityLevel = "Baixo";
+                        SecurityLevelColor = "red";
+                        ThreatLevel = "Crítico";
+                        break;
+
+                    default:
+                        ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                        return Page();
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Erro inesperado: {ex.Message}");
+                return Page();
+            }
         }
 
         private string ExecutarPing(string host)
@@ -166,6 +175,17 @@ namespace MeuAppSeguranca.Pages
             var urlPattern = @"^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$";
 
             return Regex.IsMatch(input, ipPattern) || Regex.IsMatch(input, urlPattern);
+        }
+
+        private string NormalizeUrl(string input)
+        {
+            if (Regex.IsMatch(input, @"^(\d{1,3}\.){3}\d{1,3}$"))
+                return input;
+
+            if (!input.StartsWith("http://") && !input.StartsWith("https://"))
+                return "https://" + input;
+
+            return input;
         }
 
         private string SanitizeTarget(string input)
