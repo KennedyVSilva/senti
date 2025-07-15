@@ -1,7 +1,5 @@
 @page
 @model MeuAppSeguranca.Pages.IndexModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,65 +11,74 @@
 <body>
     <h1>Sentinel7 - Testes de Segurança do Cloudinho</h1>
 
-    <form method="post">
-        @Html.AntiForgeryToken()
-
+    <form method="post" asp-antiforgery="true">
         <fieldset>
-            <legend>Teste de Segurança</legend>
+            <legend>⚙️ Teste de Segurança</legend>
 
-            <label for="Target">URL ou IP para testar:</label>
-            <input asp-for="Target" placeholder="Digite URL ou IP" />
+            <label for="Target">🔗 URL ou IP para testar:</label>
+            <input asp-for="Target" placeholder="Ex: https://site.com ou 192.168.0.1" />
             <span asp-validation-for="Target" style="color: red;"></span>
 
             <div>
-                <label for="TestType">Tipo de Teste:</label>
+                <label for="TestType">🧪 Tipo de Teste:</label>
                 <select asp-for="TestType">
-                    <option value="basic">Básico</option>
-                    <option value="medium">Médio</option>
-                    <option value="advanced">Avançado</option>
+                    <option value="basic">Básico (Testes Passivos)</option>
+                    <option value="medium">Médio (Testes Controlados)</option>
+                    <option value="advanced">Avançado (Testes Agressivos)</option>
                 </select>
             </div>
 
-            <button type="submit">Testar</button>
+            <button type="submit">🚀 Iniciar Teste</button>
         </fieldset>
     </form>
 
+    <section style="margin-top: 2rem;">
+        <h2>🎯 Testes Inclusos</h2>
+        <ul>
+            <li>✅ Port Scanning Profissional</li>
+            <li>✅ Análise de Aplicações Web</li>
+            <li>✅ Testes de SQL Injection</li>
+            <li>✅ Testes de XSS</li>
+            <li>✅ Análise SSL/TLS</li>
+            <li>✅ Enumeração DNS</li>
+            <li>✅ Directory Traversal</li>
+            <li>✅ Análise de Headers</li>
+        </ul>
+    </section>
+
     @if (Model.HasResult)
     {
-        <div>
-            <h3>Resultados</h3>
-
-            <p><strong>Nível de Segurança:</strong> 
-                <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span>
-            </p>
+        <section style="margin-top: 2rem;">
+            <h2>📋 Resultados</h2>
+            <p><strong>Nível de Segurança:</strong> <span style="color: @Model.SecurityLevelColor">@Model.SecurityLevel</span></p>
             <p><strong>Nível de Ameaça:</strong> @Model.ThreatLevel</p>
 
             @if (!string.IsNullOrEmpty(Model.BasicResult))
             {
                 <div class="result-box">
-                    <strong>🔰 Teste Básico:</strong>
-                    <p>@Model.BasicResult</p>
+                    <strong>🔰 Teste Básico (Passivo):</strong>
+                    <pre>@Model.BasicResult</pre>
                 </div>
             }
             @if (!string.IsNullOrEmpty(Model.MediumResult))
             {
                 <div class="result-box">
-                    <strong>🛡️ Teste Médio:</strong>
-                    <p>@Model.MediumResult</p>
+                    <strong>🛡️ Teste Médio (Controlado):</strong>
+                    <pre>@Model.MediumResult</pre>
                 </div>
             }
             @if (!string.IsNullOrEmpty(Model.AdvancedResult))
             {
                 <div class="result-box">
-                    <strong>⚔️ Teste Avançado:</strong>
-                    <p>@Model.AdvancedResult</p>
+                    <strong>⚔️ Teste Avançado (Agressivo):</strong>
+                    <pre>@Model.AdvancedResult</pre>
                 </div>
             }
-        </div>
+        </section>
     }
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.min.js"></script>
+    <script asp-add-nonce src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
