@@ -31,55 +31,70 @@ namespace MeuAppSeguranca.Pages
 
         public IActionResult OnPost()
         {
-            if (string.IsNullOrWhiteSpace(Target))
+            try
             {
-                ModelState.AddModelError("Target", "O campo é obrigatório.");
-                return Page();
-            }
-
-            if (!IsValidUrlOrIp(Target))
-            {
-                ModelState.AddModelError("Target", "Digite uma URL ou IP válido.");
-                return Page();
-            }
-
-            switch (TestType?.ToLower())
-            {
-                case "basic":
-                    BasicResult = $"[Simulado] Executado ping e verificação DNS em {Target}";
-                    SecurityLevel = "Alto";
-                    SecurityLevelColor = "green";
-                    ThreatLevel = "Baixo";
-                    break;
-
-                case "medium":
-                    MediumResult = $"[Simulado] Scan de portas padrão e análise TLS em {Target}";
-                    SecurityLevel = "Médio";
-                    SecurityLevelColor = "orange";
-                    ThreatLevel = "Moderado";
-                    break;
-
-                case "advanced":
-                    AdvancedResult = $"[Simulado] Verificação de vulnerabilidades XSS, SQLi, headers em {Target}";
-                    SecurityLevel = "Baixo";
-                    SecurityLevelColor = "red";
-                    ThreatLevel = "Crítico";
-                    break;
-
-                default:
-                    ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                if (string.IsNullOrWhiteSpace(Target))
+                {
+                    ModelState.AddModelError("Target", "O campo é obrigatório.");
                     return Page();
-            }
+                }
 
-            return Page();
+                if (!IsValidUrlOrIp(Target))
+                {
+                    ModelState.AddModelError("Target", "Digite uma URL ou IP válido (ex: 192.168.0.1 ou https://site.com).");
+                    return Page();
+                }
+
+                // Lógica de teste simulada com base no tipo
+                switch (TestType?.ToLower())
+                {
+                    case "basic":
+                        BasicResult = $"[Simulado] Executado ping e verificação DNS em {Target}";
+                        SecurityLevel = "Alto";
+                        SecurityLevelColor = "green";
+                        ThreatLevel = "Baixo";
+                        break;
+
+                    case "medium":
+                        MediumResult = $"[Simulado] Scan de portas padrão e análise TLS em {Target}";
+                        SecurityLevel = "Médio";
+                        SecurityLevelColor = "orange";
+                        ThreatLevel = "Moderado";
+                        break;
+
+                    case "advanced":
+                        AdvancedResult = $"[Simulado] Verificação de vulnerabilidades XSS, SQLi, headers em {Target}";
+                        SecurityLevel = "Baixo";
+                        SecurityLevelColor = "red";
+                        ThreatLevel = "Crítico";
+                        break;
+
+                    default:
+                        ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
+                        return Page();
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Erro interno: {ex.Message}");
+                return Page();
+            }
         }
 
         private bool IsValidUrlOrIp(string input)
         {
-            string urlPattern = @"^https?:\/\/[^\s\/$.?#].[^\s]*$";
-            string ipPattern = @"^(\d{1,3}\.){3}\d{1,3}$";
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
 
-            return Regex.IsMatch(input, urlPattern) || Regex.IsMatch(input, ipPattern);
+            // Regex para IP v4 (0.0.0.0 a 255.255.255.255)
+            var ipPattern = @"^(\d{1,3}\.){3}\d{1,3}$";
+
+            // Regex para URL básica (http ou https)
+            var urlPattern = @"^(https?:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,})(\/\S*)?$";
+
+            return Regex.IsMatch(input, ipPattern) || Regex.IsMatch(input, urlPattern);
         }
     }
 }
