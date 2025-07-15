@@ -125,7 +125,14 @@ namespace MeuAppSeguranca.Pages
         {
             try
             {
-                using var http = new HttpClient();
+                var handler = new HttpClientHandler
+                {
+                    AllowAutoRedirect = true
+                };
+
+                using var http = new HttpClient(handler);
+                http.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; Sentinel7Bot/1.0)");
+
                 var response = await http.GetAsync(url);
 
                 var resultado = $"Status HTTP: {(int)response.StatusCode} - {response.ReasonPhrase}\n";
