@@ -3,98 +3,68 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
 
 namespace MeuAppSeguranca.Pages
+
+    public IActionResult OnPost()
 {
-    public class IndexModel : PageModel
+    Console.WriteLine("===== [DEBUG] Método OnPost chamado =====");
+    Console.WriteLine($"Target recebido: {Target}");
+    Console.WriteLine($"Tipo de teste recebido: {TestType}");
+
+    try
     {
-        [BindProperty]
-        public string Target { get; set; }
-
-        [BindProperty]
-        public string TestType { get; set; }
-
-        public string BasicResult { get; set; }
-        public string MediumResult { get; set; }
-        public string AdvancedResult { get; set; }
-
-        public string SecurityLevel { get; set; }
-        public string SecurityLevelColor { get; set; }
-        public string ThreatLevel { get; set; }
-
-        public bool HasResult =>
-            !string.IsNullOrEmpty(BasicResult) ||
-            !string.IsNullOrEmpty(MediumResult) ||
-            !string.IsNullOrEmpty(AdvancedResult);
-
-        public void OnGet()
+        if (string.IsNullOrWhiteSpace(Target))
         {
+            Console.WriteLine("[DEBUG] Target vazio ou nulo.");
+            ModelState.AddModelError("Target", "O campo é obrigatório.");
+            return Page();
         }
 
-        public IActionResult OnPost()
+        if (!IsValidUrlOrIp(Target))
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(Target))
-                {
-                    ModelState.AddModelError("Target", "O campo é obrigatório.");
-                    return Page();
-                }
+            Console.WriteLine($"[DEBUG] Target inválido: {Target}");
+            ModelState.AddModelError("Target", "Digite uma URL ou IP válido (ex: 192.168.0.1 ou https://site.com).");
+            return Page();
+        }
 
-                if (!IsValidUrlOrIp(Target))
-                {
-                    ModelState.AddModelError("Target", "Digite uma URL ou IP válido (ex: 192.168.0.1 ou https://site.com).");
-                    return Page();
-                }
+        switch (TestType?.ToLower())
+        {
+            case "basic":
+                Console.WriteLine("[DEBUG] Teste: básico");
+                BasicResult = $"[Simulado] Executado ping e verificação DNS em {Target}";
+                SecurityLevel = "Alto";
+                SecurityLevelColor = "green";
+                ThreatLevel = "Baixo";
+                break;
 
-                // Lógica de teste simulada com base no tipo
-                switch (TestType?.ToLower())
-                {
-                    case "basic":
-                        BasicResult = $"[Simulado] Executado ping e verificação DNS em {Target}";
-                        SecurityLevel = "Alto";
-                        SecurityLevelColor = "green";
-                        ThreatLevel = "Baixo";
-                        break;
+            case "medium":
+                Console.WriteLine("[DEBUG] Teste: médio");
+                MediumResult = $"[Simulado] Scan de portas padrão e análise TLS em {Target}";
+                SecurityLevel = "Médio";
+                SecurityLevelColor = "orange";
+                ThreatLevel = "Moderado";
+                break;
 
-                    case "medium":
-                        MediumResult = $"[Simulado] Scan de portas padrão e análise TLS em {Target}";
-                        SecurityLevel = "Médio";
-                        SecurityLevelColor = "orange";
-                        ThreatLevel = "Moderado";
-                        break;
+            case "advanced":
+                Console.WriteLine("[DEBUG] Teste: avançado");
+                AdvancedResult = $"[Simulado] Verificação de vulnerabilidades XSS, SQLi, headers em {Target}";
+                SecurityLevel = "Baixo";
+                SecurityLevelColor = "red";
+                ThreatLevel = "Crítico";
+                break;
 
-                    case "advanced":
-                        AdvancedResult = $"[Simulado] Verificação de vulnerabilidades XSS, SQLi, headers em {Target}";
-                        SecurityLevel = "Baixo";
-                        SecurityLevelColor = "red";
-                        ThreatLevel = "Crítico";
-                        break;
-
-                    default:
-                        ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
-                        return Page();
-                }
-
+            default:
+                Console.WriteLine("[DEBUG] Tipo de teste inválido.");
+                ModelState.AddModelError("TestType", "Selecione um tipo de teste válido.");
                 return Page();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"Erro interno: {ex.Message}");
-                return Page();
-            }
         }
 
-        private bool IsValidUrlOrIp(string input)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-                return false;
-
-            // Regex para IP v4 (0.0.0.0 a 255.255.255.255)
-            var ipPattern = @"^(\d{1,3}\.){3}\d{1,3}$";
-
-            // Regex para URL básica (http ou https)
-            var urlPattern = @"^(https?:\/\/)?([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,})(\/\S*)?$";
-
-            return Regex.IsMatch(input, ipPattern) || Regex.IsMatch(input, urlPattern);
-        }
+        Console.WriteLine("[DEBUG] Resultado gerado com sucesso.");
+        return Page();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[ERRO] Exceção: {ex.Message}");
+        ModelState.AddModelError(string.Empty, $"Erro interno: {ex.Message}");
+        return Page();
     }
 }

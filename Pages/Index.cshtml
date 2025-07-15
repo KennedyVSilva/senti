@@ -1,5 +1,7 @@
 @page
 @model MeuAppSeguranca.Pages.IndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,7 +13,9 @@
 <body>
     <h1>Sentinel7 - Testes de Segurança do Cloudinho</h1>
 
-    <form method="post" asp-antiforgery="true">
+    <form method="post">
+        @Html.AntiForgeryToken()
+
         <fieldset>
             <legend>Teste de Segurança</legend>
 
@@ -43,31 +47,31 @@
             <p><strong>Nível de Ameaça:</strong> @Model.ThreatLevel</p>
 
             @if (!string.IsNullOrEmpty(Model.BasicResult))
-			{
-				<div class="result-box">
-					<strong>🔰 Teste Básico:</strong>
-					<p>@Model.BasicResult</p>
-				</div>
-			}
-	@if (!string.IsNullOrEmpty(Model.MediumResult))
-	{
-		<div class="result-box">
-			<strong>🛡️ Teste Médio:</strong>
-			<p>@Model.MediumResult</p>
-		</div>
-	}
-	@if (!string.IsNullOrEmpty(Model.AdvancedResult))
-	{
-		<div class="result-box">
-			<strong>⚔️ Teste Avançado:</strong>
-			<p>@Model.AdvancedResult</p>
-		</div>
-	}
-		</div>
+            {
+                <div class="result-box">
+                    <strong>🔰 Teste Básico:</strong>
+                    <p>@Model.BasicResult</p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.MediumResult))
+            {
+                <div class="result-box">
+                    <strong>🛡️ Teste Médio:</strong>
+                    <p>@Model.MediumResult</p>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.AdvancedResult))
+            {
+                <div class="result-box">
+                    <strong>⚔️ Teste Avançado:</strong>
+                    <p>@Model.AdvancedResult</p>
+                </div>
+            }
+        </div>
     }
 
-    <script asp-add-nonce src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script asp-add-nonce src="~/lib/jquery-validation/dist/jquery.min.js"></script>
-    <script asp-add-nonce src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
